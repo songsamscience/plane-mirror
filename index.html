@@ -14,6 +14,7 @@
     --line:#dbe7f3;
     --pink:#FFB7B2; --pink-deep:#e86a87; --pink-soft:#fff0f3;
     --blue:#0F6FB8; --blue-soft:#e9f3fb; --blue-mid:#4a9fe0;
+    --ok:#1a9c6b; --ok-soft:#e7f7f0; --bad:#d6485f; --bad-soft:#fdecef;
     --amber:#F2994A;
     --shadow:0 16px 40px rgba(33,68,104,.14);
     --radius:22px;
@@ -33,6 +34,7 @@
     --line:#23344e;
     --pink:#FF9FA8; --pink-deep:#ff9fb0; --pink-soft:#2a1c24;
     --blue:#5aa6e8; --blue-soft:#142435; --blue-mid:#6db4ee;
+    --ok:#45c79a; --ok-soft:#13302a; --bad:#ff8a9a; --bad-soft:#331b22;
     --amber:#F6A95C;
     --shadow:0 16px 40px rgba(0,0,0,.5);
     --cv-bg:#101a2b; --cv-grid:#1b2842; --cv-ink:#e8eef8; --cv-muted:#9fb2c8;
@@ -155,6 +157,48 @@
     display:grid;place-items:center;border-radius:50%;background:var(--pink-deep);color:#fff;font-weight:900;}
   .task b{color:var(--blue);}
 
+  /* 문제 게임 */
+  .quiz{max-width:760px;margin:0 auto;}
+  .quiz-top{display:flex;align-items:center;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
+  .quiz-prog{flex:1;min-width:160px;height:10px;border-radius:999px;background:var(--card2);border:1px solid var(--line);overflow:hidden;}
+  .quiz-prog i{display:block;height:100%;width:0;border-radius:999px;background:linear-gradient(90deg,var(--blue),var(--pink-deep));transition:width .3s;}
+  .quiz-meta{font-weight:900;font-size:.9rem;color:var(--muted);white-space:nowrap;}
+  .quiz-meta b{color:var(--blue);}
+  .quiz-score{font-weight:900;font-size:.9rem;color:var(--ok);white-space:nowrap;}
+  .quiz-q{background:var(--card2);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;margin-bottom:13px;}
+  .quiz-tag{display:inline-block;font-size:.72rem;font-weight:900;color:var(--blue);background:var(--blue-soft);
+    border:1px solid var(--blue-mid);border-radius:999px;padding:2px 10px;margin-bottom:10px;}
+  .quiz-q h3{margin:0;font-size:1.06rem;line-height:1.5;letter-spacing:-.02em;}
+  .quiz-opts{display:grid;gap:9px;margin-top:14px;}
+  .opt{display:flex;align-items:center;gap:11px;padding:12px 14px;background:var(--card);border:1.5px solid var(--line);
+    border-radius:12px;cursor:pointer;text-align:left;font-weight:700;font-size:.95rem;color:var(--ink);transition:.13s;line-height:1.4;}
+  .opt:hover:not(:disabled){border-color:var(--blue-mid);background:var(--blue-soft);}
+  .opt .mk{flex:0 0 27px;width:27px;height:27px;border-radius:8px;background:var(--card2);border:1px solid var(--line);
+    display:grid;place-items:center;font-weight:900;font-size:.85rem;color:var(--muted);}
+  .opt:disabled{cursor:default;}
+  .opt.correct{border-color:var(--ok);background:var(--ok-soft);}
+  .opt.correct .mk{background:var(--ok);color:#fff;border-color:var(--ok);}
+  .opt.wrong{border-color:var(--bad);background:var(--bad-soft);}
+  .opt.wrong .mk{background:var(--bad);color:#fff;border-color:var(--bad);}
+  .opt.dim{opacity:.55;}
+  .quiz-fb{margin-top:14px;padding:13px 15px;border-radius:13px;font-weight:700;font-size:.92rem;line-height:1.55;
+    border:1px solid var(--line);background:var(--card);display:none;}
+  .quiz-fb.show{display:block;}
+  .quiz-fb.ok{border-color:var(--ok);background:var(--ok-soft);}
+  .quiz-fb.no{border-color:var(--bad);background:var(--bad-soft);}
+  .quiz-fb .lab{font-weight:900;}
+  .quiz-fb.ok .lab{color:var(--ok);}
+  .quiz-fb.no .lab{color:var(--bad);}
+  .quiz-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:15px;}
+  /* 결과 화면 */
+  .quiz-result{text-align:center;padding:24px 12px;}
+  .quiz-result .big{font-size:3rem;font-weight:900;letter-spacing:-.04em;
+    background:linear-gradient(135deg,var(--blue),var(--pink-deep));-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .quiz-result .emoji{font-size:3.2rem;}
+  .quiz-result p{margin:8px 0 0;font-weight:800;color:var(--muted);line-height:1.6;}
+  .quiz-result .grade{display:inline-block;margin-top:12px;padding:6px 18px;border-radius:999px;font-weight:900;
+    background:var(--blue-soft);border:1px solid var(--blue-mid);color:var(--blue);font-size:1.05rem;}
+
   /* dialog */
   dialog{border:0;padding:0;background:transparent;width:min(900px,94vw);}
   dialog::backdrop{background:rgba(8,22,38,.42);backdrop-filter:blur(4px);}
@@ -210,10 +254,10 @@
         <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M5 5l1.5 1.5M17.5 17.5L19 19M19 5l-1.5 1.5M6.5 17.5L5 19"/></svg>
       </button>
       <a class="social" href="https://www.youtube.com/@songsamscience" target="_blank" rel="noopener" title="송쌤과학 유튜브">
-        <svg viewBox="0 0 24 24"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="m9.7 15.6 6.2-3.6-6.2-3.6z"/></svg>유튜브
+        <svg viewBox="0 0 24 24"><path fill="#FF0033" d="M23.5 6.2a3 3 0 0 0-2.1-2.1C19.5 3.6 12 3.6 12 3.6s-7.5 0-9.4.5A3 3 0 0 0 .5 6.2 31 31 0 0 0 0 12a31 31 0 0 0 .5 5.8 3 3 0 0 0 2.1 2.1c1.9.5 9.4.5 9.4.5s7.5 0 9.4-.5a3 3 0 0 0 2.1-2.1A31 31 0 0 0 24 12a31 31 0 0 0-.5-5.8z"/><path fill="#fff" d="m9.7 15.6 6.2-3.6-6.2-3.6z"/></svg>송쌤과학 유튜브
       </a>
-      <a class="social" href="https://www.instagram.com/songsamscience/" target="_blank" rel="noopener" title="송쌤과학 인스타그램">
-        <svg viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="24" x2="24" y2="0"><stop stop-color="#ffd600"/><stop offset=".5" stop-color="#ff0069"/><stop offset="1" stop-color="#7638fa"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.4" fill="#fff"/></svg>인스타
+      <a class="social" href="https://www.instagram.com/songsamscience/" target="_blank" rel="noopener" title="송쌤과학 인스타">
+        <svg viewBox="0 0 24 24"><defs><linearGradient id="ig" x1="0" y1="24" x2="24" y2="0"><stop stop-color="#ffd600"/><stop offset=".5" stop-color="#ff0069"/><stop offset="1" stop-color="#7638fa"/></linearGradient></defs><rect x="2" y="2" width="20" height="20" rx="6" fill="url(#ig)"/><circle cx="12" cy="12" r="4" fill="none" stroke="#fff" stroke-width="2"/><circle cx="17.5" cy="6.5" r="1.4" fill="#fff"/></svg>송쌤과학 인스타
       </a>
     </div>
   </header>
@@ -228,7 +272,7 @@
               <option value="lamp">전등 광원</option>
             </select>
           </label>
-          <button class="btn primary" id="measureBtn" aria-pressed="false">거리 측정 켜기</button>
+          <button class="btn primary" id="quizBtn" aria-pressed="false">🎮 문제 게임</button>
           <button class="btn" id="seqBtn" aria-pressed="false">관찰 순서</button>
           <button class="btn" id="taskBtn" aria-pressed="false">활동 과제</button>
           <button class="btn" id="theoryBtn">이론 보기</button>
@@ -261,6 +305,7 @@
         <label class="tg">거울 뒤 허상(점선) 표시 <input type="checkbox" id="tVirtual" checked></label>
         <label class="tg">번호 광선(1·2·3) 표시 <input type="checkbox" id="tDots" checked></label>
         <label class="tg">배경 모눈 표시 <input type="checkbox" id="tGrid" checked></label>
+        <label class="tg">📏 거리 측정 표시 (물체–거울–상) <input type="checkbox" id="tMeasure"></label>
       </div>
       <div class="slider">
         <label>물체 높이 <span id="vObjY">–</span></label>
@@ -297,6 +342,18 @@
     </div>
     <div class="dock-body">
       <div class="tasks" id="taskList"></div>
+    </div>
+  </section>
+
+  <!-- 문제 게임 dock -->
+  <section class="dock" id="quizDock" hidden>
+    <div class="dock-head">
+      <div class="ttl"><span class="badge">🎮</span>평면거울 문제 게임</div>
+      <div class="sub">중2 빛과 파동 · 평면거울 10문제. 정답을 고르면 바로 해설이 나옵니다.</div>
+      <button class="icon-btn" id="quizClose" title="닫기" aria-label="문제 게임 닫기" style="width:36px;height:36px">✕</button>
+    </div>
+    <div class="dock-body">
+      <div class="quiz" id="quizBody"></div>
     </div>
   </section>
 
@@ -650,18 +707,23 @@ function eqBadge(cx,cy,text){
 }
 
 function drawDistance(p, vp){
-  var mx = state.mirrorX, y = p.y+118;
+  var mx = state.mirrorX;
+  var box = objBox(state.obj.x, state.obj.y);
+  var vbox = objBox(vp.x, p.y);               // 허상 박스(좌우 대칭 위치)
+  var topO = box.y, topV = vbox.y;
+  var y = Math.max(30, Math.min(topO, topV) - 26);  // 물체·상 중 더 높은 상단보다 위
   ctx.save();
-  ctx.globalAlpha = .9;
-  // 물체-거울
-  doubleArrow(p.x, y, mx, y, T.muted);
-  // 거울-상
-  doubleArrow(mx, y, vp.x, y, T.muted);
-  // 수직 안내선
+  ctx.globalAlpha = .95;
+  // 수직 안내선: 측정선 → 물체 / 거울 / 상
   ctx.setLineDash([4,5]); ctx.strokeStyle=T.muted; ctx.lineWidth=1.4;
-  ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(p.x,y); ctx.stroke();
-  ctx.beginPath(); ctx.moveTo(vp.x,p.y); ctx.lineTo(vp.x,y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(p.x, y);  ctx.lineTo(p.x, topO); ctx.stroke();   // 물체 상단까지
+  ctx.beginPath(); ctx.moveTo(vp.x, y); ctx.lineTo(vp.x, topV); ctx.stroke();  // 상 상단까지
+  ctx.beginPath(); ctx.moveTo(mx, y-10); ctx.lineTo(mx, y+12); ctx.stroke();   // 거울 위치 tick
   ctx.setLineDash([]);
+  // 물체–거울 / 거울–상 양방향 화살표 (상단)
+  doubleArrow(p.x, y, mx, y, T.muted);
+  doubleArrow(mx, y, vp.x, y, T.muted);
+  // 라벨
   var cm1 = ((mx-p.x)/40).toFixed(1), cm2 = ((vp.x-mx)/40).toFixed(1);
   ctx.font="800 13px 'Noto Sans KR',sans-serif"; ctx.textAlign="center"; ctx.textBaseline="bottom";
   ctx.fillStyle=T.ink;
@@ -969,16 +1031,162 @@ function savePNG(){
   a.href=off.toDataURL("image/png"); a.click();
 }
 
+// ---------- 문제 게임 (중2 빛과 파동 · 평면거울) ----------
+var QUIZ = [
+  { tag:"반사 법칙",
+    q:"빛이 평면거울에 부딪쳐 반사될 때, 입사각과 반사각의 관계로 옳은 것은?",
+    opts:["입사각이 항상 반사각보다 크다","입사각과 반사각은 항상 같다","반사각이 항상 입사각보다 크다","입사각이 0°일 때만 같다"],
+    answer:1,
+    why:"반사 법칙에 따라 <b>입사각 = 반사각</b>이 항상 성립합니다. 거울이 평면이든 곡면이든, 한 점에서의 반사는 이 법칙을 따릅니다." },
+  { tag:"법선",
+    q:"입사각과 반사각을 잴 때 기준이 되는 선은 무엇인가?",
+    opts:["거울 면과 나란한 선","입사 광선","거울 면에 수직인 법선","반사 광선"],
+    answer:2,
+    why:"입사각·반사각은 모두 <b>법선(거울 면에 수직인 선)</b>과 광선 사이의 각으로 정의합니다. 거울 면을 기준으로 재는 것이 아닙니다." },
+  { tag:"상의 종류",
+    q:"평면거울에 의해 생기는 상에 대한 설명으로 옳은 것은?",
+    opts:["실제 빛이 모여 생기는 실상이다","스크린에 맺을 수 있는 실상이다","빛이 모이지 않는 허상이다","거울 앞쪽에 생긴다"],
+    answer:2,
+    why:"평면거울의 상은 빛이 실제로 모인 것이 아니라, 반사된 빛을 거울 뒤로 연장했을 때 모이는 것처럼 보이는 <b>허상</b>입니다. 그래서 스크린에 맺을 수 없습니다." },
+  { tag:"상의 크기",
+    q:"평면거울에 비친 물체의 상의 크기는?",
+    opts:["실제 물체보다 크다","실제 물체보다 작다","실제 물체와 같다","거리에 따라 달라진다"],
+    answer:2,
+    why:"평면거울의 상은 크기가 <b>실제 물체와 항상 같습니다</b>. 거울에서 멀어지거나 가까워져도 상의 크기는 변하지 않습니다." },
+  { tag:"좌우 · 상하",
+    q:"평면거울에 비친 내 모습에서 바뀌어 보이는 것은?",
+    opts:["위아래가 바뀐다","좌우가 바뀐다","좌우와 위아래 모두 바뀐다","아무것도 바뀌지 않는다"],
+    answer:1,
+    why:"평면거울의 상은 위아래는 그대로이고 <b>좌우가 바뀌어</b> 보입니다(좌우 반전). 오른손을 들면 거울 속 상은 왼손을 든 것처럼 보입니다." },
+  { tag:"거리 대칭",
+    q:"물체가 거울에서 30 cm 떨어져 있다. 거울에서 상까지의 거리는?",
+    opts:["15 cm","30 cm","60 cm","알 수 없다"],
+    answer:1,
+    why:"상은 거울 면을 기준으로 물체와 <b>대칭</b>인 위치에 생깁니다. 따라서 (물체–거울 거리) = (거울–상 거리) = <b>30 cm</b>입니다." },
+  { tag:"상의 이동",
+    q:"내가 거울을 향해 10 cm 다가가면, 거울 속 내 상과 나 사이의 거리는 어떻게 변하는가?",
+    opts:["10 cm 가까워진다","20 cm 가까워진다","변하지 않는다","10 cm 멀어진다"],
+    answer:1,
+    why:"내가 10 cm 다가가면 상도 거울 뒤에서 10 cm 다가옵니다. 나와 상이 각각 10 cm씩 가까워지므로 둘 사이 거리는 <b>20 cm</b> 줄어듭니다." },
+  { tag:"정반사·난반사",
+    q:"매끄러운 거울에서는 상이 또렷이 보이지만 거친 종이에서는 보이지 않는다. 종이에서 일어나는 현상은?",
+    opts:["빛이 흡수되어 반사가 안 된다","난반사가 일어난다","입사각=반사각이 성립하지 않는다","빛이 굴절된다"],
+    answer:1,
+    why:"거친 면에서는 표면의 방향이 제각각이라 반사광이 여러 방향으로 흩어지는 <b>난반사</b>가 일어납니다. 각 점에서는 입사각=반사각이 성립하지만 상은 맺히지 않습니다." },
+  { tag:"거울 속 글자",
+    q:"평면거울 앞에 'E' 모양 글자를 세워 두면 거울 속에서는 어떻게 보이는가?",
+    opts:["위아래가 뒤집혀 보인다","좌우가 뒤집혀 보인다","그대로 보인다","글자가 사라진다"],
+    answer:1,
+    why:"평면거울은 좌우를 반전시키므로, 'E'는 좌우가 뒤집힌 모양(ョ 방향)으로 보입니다. 구급차 앞에 글자를 좌우로 뒤집어 쓰는 것도 같은 원리입니다." },
+  { tag:"거울의 이용",
+    q:"잠망경은 두 개의 평면거울을 이용해 장애물 뒤나 물 위의 바깥을 볼 수 있게 한다. 잠망경이 이용하는 빛의 성질은?",
+    opts:["빛의 굴절","빛의 반사","빛의 분산","빛의 흡수"],
+    answer:1,
+    why:"잠망경은 위·아래에 비스듬히 놓인 두 평면거울에서 빛이 차례로 <b>반사</b>되어 눈으로 들어오는 원리입니다. 평면거울의 반사를 이용한 대표적인 도구예요." }
+];
+
+var quizState = { i:0, score:0, answered:false };
+
+function startQuiz(){
+  quizState = { i:0, score:0, answered:false };
+  renderQuiz();
+}
+
+function renderQuiz(){
+  var box = $("quizBody");
+  var n = QUIZ.length, qi = quizState.i;
+  if(qi >= n){ renderQuizResult(); return; }
+  var item = QUIZ[qi];
+  var pct = Math.round((qi)/n*100);
+  var h = '';
+  h += '<div class="quiz-top">';
+  h +=   '<div class="quiz-prog"><i style="width:'+pct+'%"></i></div>';
+  h +=   '<div class="quiz-meta">문제 <b>'+(qi+1)+'</b> / '+n+'</div>';
+  h +=   '<div class="quiz-score">점수 '+quizState.score+'</div>';
+  h += '</div>';
+  h += '<div class="quiz-q"><span class="quiz-tag">'+item.tag+'</span><h3>'+item.q+'</h3>';
+  h +=   '<div class="quiz-opts" id="quizOpts">';
+  var marks = ["A","B","C","D"];
+  item.opts.forEach(function(o,idx){
+    h += '<button class="opt" data-idx="'+idx+'"><span class="mk">'+marks[idx]+'</span><span>'+o+'</span></button>';
+  });
+  h +=   '</div>';
+  h +=   '<div class="quiz-fb" id="quizFb"></div>';
+  h += '</div>';
+  h += '<div class="quiz-actions" id="quizActions"><button class="btn primary" id="quizNext" disabled style="visibility:hidden">다음 문제 →</button></div>';
+  box.innerHTML = h;
+
+  quizState.answered = false;
+  Array.prototype.forEach.call(box.querySelectorAll(".opt"), function(btn){
+    btn.addEventListener("click", function(){ chooseAnswer(+btn.getAttribute("data-idx")); });
+  });
+  // 새 문제는 항상 상단부터 보이도록 (열려 있을 때만 동작)
+  var qd = $("quizDock");
+  if(qd && !qd.hasAttribute("hidden") && qd.scrollIntoView) qd.scrollIntoView({behavior:"smooth", block:"start"});
+}
+
+function chooseAnswer(idx){
+  if(quizState.answered) return;
+  quizState.answered = true;
+  var item = QUIZ[quizState.i];
+  var correct = item.answer;
+  var opts = $("quizBody").querySelectorAll(".opt");
+  Array.prototype.forEach.call(opts, function(btn,i){
+    btn.disabled = true;
+    if(i===correct) btn.classList.add("correct");
+    else if(i===idx) btn.classList.add("wrong");
+    else btn.classList.add("dim");
+  });
+  var ok = (idx===correct);
+  if(ok) quizState.score++;
+  var fb = $("quizFb");
+  fb.className = "quiz-fb show " + (ok ? "ok" : "no");
+  fb.innerHTML = '<span class="lab">'+(ok ? "✓ 정답!" : "✗ 아쉬워요")+'</span> &nbsp;'+item.why;
+  // 점수 갱신 표시
+  var sc = $("quizBody").querySelector(".quiz-score");
+  if(sc) sc.textContent = "점수 "+quizState.score;
+
+  var last = (quizState.i === QUIZ.length-1);
+  var nb = $("quizNext");
+  nb.textContent = last ? "결과 보기 →" : "다음 문제 →";
+  nb.disabled = false;
+  nb.style.visibility = "visible";
+  nb.onclick = function(){ quizState.i++; renderQuiz(); };
+  // 해설·다음 버튼이 바로 보이도록 (가려져 있을 때만 스크롤)
+  if(nb.scrollIntoView) nb.scrollIntoView({behavior:"smooth", block:"nearest"});
+}
+
+function renderQuizResult(){
+  var n = QUIZ.length, s = quizState.score;
+  var emoji, grade, msg;
+  if(s === n){ emoji="🏆"; grade="만점!"; msg="평면거울의 반사 법칙과 상의 성질을 완벽하게 이해했어요!"; }
+  else if(s >= 8){ emoji="🎉"; grade="훌륭해요"; msg="아주 잘했어요. 틀린 문제의 해설을 한 번 더 확인해 보세요."; }
+  else if(s >= 5){ emoji="👍"; grade="좋아요"; msg="기본 개념은 잡혔어요. 거리 대칭과 좌우 반전을 복습해 볼까요?"; }
+  else { emoji="💪"; grade="다시 도전!"; msg="이론 보기와 관찰 순서를 살펴본 뒤 다시 풀어 보세요."; }
+  var box = $("quizBody");
+  box.innerHTML =
+    '<div class="quiz-result">'+
+      '<div class="emoji">'+emoji+'</div>'+
+      '<div class="big">'+s+' / '+n+'</div>'+
+      '<div class="grade">'+grade+'</div>'+
+      '<p>'+msg+'</p>'+
+      '<div class="quiz-actions" style="justify-content:center;margin-top:20px">'+
+        '<button class="btn" id="quizRestart">다시 풀기</button>'+
+        '<button class="btn pink" id="quizDone">닫기</button>'+
+      '</div>'+
+    '</div>';
+  $("quizRestart").addEventListener("click", function(){ startQuiz(); });
+  $("quizDone").addEventListener("click", function(){ closeQuizDock(); });
+}
+
+function closeQuizDock(){
+  $("quizDock").setAttribute("hidden","");
+  var b=$("quizBtn"); if(b) b.setAttribute("aria-pressed","false");
+}
+
 // ---------- 이벤트 ----------
 function bind(){
   $("objType").addEventListener("change", function(e){ state.objType=e.target.value; draw(); });
-
-  $("measureBtn").addEventListener("click", function(){
-    state.measure=!state.measure;
-    this.setAttribute("aria-pressed", state.measure);
-    this.textContent = state.measure ? "거리 측정 끄기" : "거리 측정 켜기";
-    draw();
-  });
 
   function toggleDock(dockId, btnId){
     var dock=$(dockId), btn=$(btnId);
@@ -992,6 +1200,13 @@ function bind(){
   $("taskBtn").addEventListener("click", function(){ toggleDock("taskDock","taskBtn"); });
   $("seqClose").addEventListener("click", function(){ toggleDock("seqDock","seqBtn"); });
   $("taskClose").addEventListener("click", function(){ toggleDock("taskDock","taskBtn"); });
+
+  $("quizBtn").addEventListener("click", function(){
+    var opening = $("quizDock").hasAttribute("hidden");
+    if(opening) startQuiz();
+    toggleDock("quizDock","quizBtn");
+  });
+  $("quizClose").addEventListener("click", function(){ toggleDock("quizDock","quizBtn"); });
 
   $("seqPop").addEventListener("click", function(){
     var html = STEPS.map(function(s){ return '<div class="item"><span class="num">'+s.n+'</span><b>'+s.b+'</b><br>'+s.s+'</div>'; }).join("");
@@ -1017,6 +1232,7 @@ function bind(){
   Object.keys(map).forEach(function(id){
     $(id).addEventListener("change", function(e){ state.show[map[id]]=e.target.checked; draw(); });
   });
+  $("tMeasure").addEventListener("change", function(e){ state.measure=e.target.checked; draw(); });
   // 슬라이더
   $("sObjY").addEventListener("input", function(e){ state.obj.y=+e.target.value; draw(); });
   $("sEyeY").addEventListener("input", function(e){ state.eye.y=+e.target.value; draw(); });
